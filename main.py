@@ -94,7 +94,7 @@ class VideoDownloader:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("resolution", type=int, help="max resolution for video eg 720, 1080 1440",default=240)
+    parser.add_argument("resolution", type=int, help="max resolution for video eg 720, 1080. if -1 then it uses your screen resolution",default=-1)
     args = parser.parse_args()
     max_resolution = None
     try:
@@ -102,6 +102,12 @@ if __name__ == "__main__":
     except:
         print(f"Got invalid resolution {max_resolution}")
         exit()
+
+    if max_resolution == -1:
+        # get display ressolution
+        import ctypes
+        user32 = ctypes.windll.user32
+        max_resolution = user32.GetSystemMetrics(1)
 
     print(f"using {max_resolution}p")
 
